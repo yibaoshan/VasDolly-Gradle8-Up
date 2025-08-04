@@ -2,10 +2,12 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-ext."signing.keyId" = properties.getProperty("signing.keyId")
-ext."signing.password" = properties.getProperty("signing.password")
-ext."signing.secretKeyRingFile" = properties.getProperty("signing.secretKeyRingFile")
+if (project.rootProject.file('local.properties').exists()) {
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    ext."signing.keyId" = properties.getProperty("signing.keyId")
+    ext."signing.password" = properties.getProperty("signing.password")
+    ext."signing.secretKeyRingFile" = properties.getProperty("signing.secretKeyRingFile")
+}
 
 group = "com.tencent.vasdolly"
 version = project.rootProject.VERSION
@@ -25,7 +27,6 @@ afterEvaluate {
                 } else {
                     from components.java
                 }
-
 
                 pom {
                     name = POM_NAME

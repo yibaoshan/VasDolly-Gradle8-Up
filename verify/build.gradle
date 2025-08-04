@@ -1,9 +1,13 @@
-apply plugin: 'java-library'
-apply from: rootProject.file("maven.gradle")
+plugins {
+    id 'java-library'
+}
+// apply from: rootProject.file("maven.gradle")
 
 dependencies {
-    api 'com.android.tools.build:apksig:3.6.4'
+    implementation 'com.android.tools.build:apksig:3.6.4'
 }
 
-targetCompatibility = JavaVersion.VERSION_1_8
-sourceCompatibility = JavaVersion.VERSION_1_8
+java {
+    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_1_8
+}

@@ -1,21 +1,24 @@
-apply plugin: 'com.android.library'
-apply from: rootProject.file("maven.gradle")
+plugins {
+    id 'com.android.library'
+}
+// apply from: rootProject.file("maven.gradle")
 
 android {
-    compileSdkVersion rootProject.compileSdkVersion
+    namespace 'com.tencent.vasdolly.helper'
+    compileSdk rootProject.compileSdkVersion
 
     defaultConfig {
-        minSdkVersion rootProject.minSdkVersion
-        targetSdkVersion rootProject.targetSdkVersion
+        minSdk rootProject.minSdkVersion
+        targetSdk rootProject.targetSdkVersion
     }
     buildTypes {
         debug {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt')
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
         }
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt')
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
         }
     }
 
@@ -26,8 +29,8 @@ android {
 }
 
 dependencies {
-    api fileTree(dir: 'libs', include: ['*.jar'])
-    api project(':reader')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':reader')
 }
 
 

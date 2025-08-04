@@ -1,26 +1,19 @@
-apply plugin: 'com.android.application'
-apply plugin: 'com.tencent.vasdolly'
-
-buildscript {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        google()
-    }
-    dependencies {
-        classpath "com.tencent.vasdolly:plugin:3.0.6"
-    }
+plugins {
+    id 'com.android.application'
 }
 
+// apply plugin: 'com.tencent.vasdolly'
+
 android {
-    compileSdkVersion rootProject.compileSdkVersion
+    namespace 'com.tencent.vasdolly.app'
+    compileSdk rootProject.compileSdkVersion
     defaultConfig {
         applicationId "com.tencent.vasdolly.app"
-        minSdkVersion rootProject.minSdkVersion
-        targetSdkVersion rootProject.targetSdkVersion
+        minSdk rootProject.minSdkVersion
+        targetSdk rootProject.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
@@ -47,55 +40,60 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
 
         debug {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
         }
     }
 
-    lintOptions {
+    lint {
         abortOnError false
+    }
+    
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 //VasDolly插件配置
 //gradle channelDebug/channelRelease 编译生成apk后，再根据生成的Apk生成渠道包
-channel{
-    channelFile = file("app_channel.txt")
-    //多渠道包的输出目录，默认为new File(project.buildDir,"channel")
-    outputDir = new File(project.buildDir,"channels")
-    //多渠道包的命名规则，默认为：${appName}-${versionName}-${versionCode}-${flavorName}-${buildType}-${buildTime}
-    apkNameFormat ='${appName}-${versionName}-${versionCode}-${flavorName}-${buildType}'
-    //快速模式：生成渠道包时不进行校验（速度可以提升10倍以上，默认为false）
-    fastMode = false
-    //buildTime的时间格式，默认格式：yyyyMMdd-HHmmss
-    buildTimeDateFormat = 'yyyyMMdd-HH:mm:ss'
-    //低内存模式（仅针对V2签名，默认为false）：只把签名块、中央目录和EOCD读取到内存，不把最大头的内容块读取到内存，在手机上合成APK时，可以使用该模式
-    lowMemory = false
-}
+// channel{
+//     channelFile = file("app_channel.txt")
+//     //多渠道包的输出目录，默认为new File(project.buildDir,"channel")
+//     outputDir = new File(project.buildDir,"channels")
+//     //多渠道包的命名规则，默认为：${appName}-${versionName}-${versionCode}-${flavorName}-${buildType}-${buildTime}
+//     apkNameFormat ='${appName}-${versionName}-${versionCode}-${flavorName}-${buildType}'
+//     //快速模式：生成渠道包时不进行校验（速度可以提升10倍以上，默认为false）
+//     fastMode = false
+//     //buildTime的时间格式，默认格式：yyyyMMdd-HHmmss
+//     buildTimeDateFormat = 'yyyyMMdd-HH:mm:ss'
+//     //低内存模式（仅针对V2签名，默认为false）：只把签名块、中央目录和EOCD读取到内存，不把最大头的内容块读取到内存，在手机上合成APK时，可以使用该模式
+//     lowMemory = false
+// }
 
 // gradle rebuildChannel 配置此任务用于不希望重新构建apk，直接根据指定的apk生成渠道包
-rebuildChannel {
-    channelFile = file("app_channel.txt")
-    //指定的apk生成渠道包,文件名中如果有base将被替换为渠道名，否则渠道名将作为前缀
-    baseApk = new File(project.buildDir, "outputs/apk/debug/app-debug.apk")
-    //默认为new File(project.buildDir, "rebuildChannel")
-    outputDir = new File(project.buildDir, "rebuildChannels")
-    //快速模式：生成渠道包时不进行校验（速度可以提升10倍以上，默认为false）
-    fastMode = false
-    //低内存模式（仅针对V2签名，默认为false）：只把签名块、中央目录和EOCD读取到内存，不把最大头的内容块读取到内存，在手机上合成APK时，可以使用该模式
-    lowMemory = false
-}
+// rebuildChannel {
+//     channelFile = file("app_channel.txt")
+//     //指定的apk生成渠道包,文件名中如果有base将被替换为渠道名，否则渠道名将作为前缀
+//     baseApk = new File(project.buildDir, "outputs/apk/debug/app-debug.apk")
+//     //默认为new File(project.buildDir, "rebuildChannel")
+//     outputDir = new File(project.buildDir, "rebuildChannels")
+//     //快速模式：生成渠道包时不进行校验（速度可以提升10倍以上，默认为false）
+//     fastMode = false
+//     //低内存模式（仅针对V2签名，默认为false）：只把签名块、中央目录和EOCD读取到内存，不把最大头的内容块读取到内存，在手机上合成APK时，可以使用该模式
+//     lowMemory = false
+// }
 
 dependencies {
-    api fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    api 'androidx.appcompat:appcompat:1.4.0'
-    //api：同老版本compile作用一样，即本module将会向外暴露其依赖的module变化，即若'helper'库发生了改变，那么本module以及所有依赖于本module的module都要重新编译
-    api "com.tencent.vasdolly:helper:3.0.6"
+    implementation 'androidx.appcompat:appcompat:1.4.0'
+    //implementation：同老版本compile作用一样，即本module将会向外暴露其依赖的module变化，即若'helper'库发生了改变，那么本module以及所有依赖于本module的module都要重新编译
+    implementation project(':helper')
 }
