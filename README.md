@@ -39,7 +39,12 @@ dependencies {
 ## 引用VasDolly Plugin
 在主App工程的`build.gradle`中，添加对VasDolly Plugin的引用：
 ``` groovy
-apply plugin: 'com.tencent.vasdolly'
+
+classpath 'com.github.yibaoshan.VasDolly-Gradle8-Up:plugin:v3.0.6'
+
+apply plugin: 'com.yibaoshan.vasdolly'
+
+api 'com.github.yibaoshan.VasDolly-Gradle8-Up:helper:v3.0.6'
 ```
 ## 添加对VasDolly helper类库的依赖
 在主App工程的`build.gradle`中，添加读取渠道信息的helper类库依赖：

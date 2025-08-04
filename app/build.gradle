@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
 }
 
-// apply plugin: 'com.tencent.vasdolly'
+// apply plugin: 'com.yibaoshan.vasdolly'
 
 android {
     namespace 'com.tencent.vasdolly.app'

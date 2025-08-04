@@ -30,9 +30,11 @@ gradlePlugin {
     automatedPublishing = false
     plugins {
         create("vasdolly") {
-            id = 'com.tencent.vasdolly'
+            id = 'com.yibaoshan.vasdolly'
             implementationClass = 'com.tencent.vasdolly.plugin.VasDollyPlugin'
             version = rootProject.VERSION
         }
     }
 }
+
+apply from: rootProject.file("maven.gradle")

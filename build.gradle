@@ -12,7 +12,7 @@ ext {
     buildToolsVersion = '31.0.0'
 
     //VasDolly插件版本信息
-    GROUP = 'com.tencent.vasdolly'
+    GROUP = 'com.yibaoshan.vasdolly'
     VERSION = '3.0.6'
 }
 

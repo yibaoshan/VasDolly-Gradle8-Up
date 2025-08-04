@@ -1,8 +1,6 @@
 plugins {
     id 'com.android.library'
 }
-// apply from: rootProject.file("maven.gradle")
-
 android {
     namespace 'com.tencent.vasdolly.helper'
     compileSdk rootProject.compileSdkVersion
@@ -32,5 +30,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':reader')
 }
+
+apply from: rootProject.file("maven.gradle")
 
 
