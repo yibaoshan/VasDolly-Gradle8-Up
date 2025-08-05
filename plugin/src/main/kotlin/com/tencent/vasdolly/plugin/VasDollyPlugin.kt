@@ -61,12 +61,18 @@ class VasDollyPlugin : Plugin<Project> {
             RebuildChannelConfigExtension::class.java,
             project
         )
+        
+        println("=== DEBUG: Extension configuration ===")
+        println("DEBUG: channelConfigExt created = ${channelConfigExt != null}")
+        println("DEBUG: channelConfigExt.channelFile = ${channelConfigExt.channelFile?.absolutePath}")
 
         //获取全局工程中配置的渠道列表（gradle.properties文件指定渠道属性）
         channelInfoList = getChannelList()
 
         //添加扩展渠道任务
         createChannelTask()
+        // 注释掉 reBuildChannel 任务创建
+        // createRebuildChannelTask()
     }
 
     /***
@@ -80,21 +86,67 @@ class VasDollyPlugin : Plugin<Project> {
                 val variantName = variant.name.capitalize()
                 println("find android build variant name:${variant.name}")
                 project.tasks.register("channel$variantName", ApkChannelPackageTask::class.java) {
+                    println("=== DEBUG: Registering task channel$variantName ===")
+                    println("DEBUG: channelConfigExt = ${channelConfigExt != null}")
+                    println("DEBUG: channelConfigExt.channelFile = ${channelConfigExt.channelFile?.absolutePath}")
+                    
                     it.variant = variant
                     it.channelExtension = channelConfigExt
                     it.channelList.addAll(channelInfoList)
                     it.mergeExtChannelList = !project.hasProperty(PROPERTY_CHANNELS)
+                    
+                    println("DEBUG: it.channelExtension = ${it.channelExtension != null}")
+                    println("DEBUG: it.channelList = ${it.channelList}")
+                    println("DEBUG: it.mergeExtChannelList = ${it.mergeExtChannelList}")
+                    
+                    // 设置配置缓存兼容的属性
+                    it.variantName.set(variant.name)
+                    it.applicationId.set(variant.applicationId)
+                    it.versionName.set(variant.outputs.first().versionName.orNull ?: "")
+                    it.versionCode.set(variant.outputs.first().versionCode.orNull ?: 0)
+                    
+                    // 设置扩展配置的缓存兼容属性
+                    it.channelFilePath.set(channelConfigExt.channelFile?.absolutePath ?: "")
+                    it.outputDirPath.set(channelConfigExt.outputDir.absolutePath)
+                    it.apkNameFormat.set(channelConfigExt.apkNameFormat)
+                    it.buildTimeDateFormat.set(channelConfigExt.buildTimeDateFormat)
+                    it.fastMode.set(channelConfigExt.fastMode)
+                    it.lowMemory.set(channelConfigExt.lowMemory)
+                    
+                    // 设置 variant 信息
+                    it.variantBuildType.set(variant.buildType)
+                    it.variantFlavorName.set(variant.flavorName)
+                    
+                    // 设置签名配置信息
+                    it.enableV1Signing.set(variant.signingConfig?.enableV1Signing?.get() ?: false)
+                    it.enableV2Signing.set(variant.signingConfig?.enableV2Signing?.get() ?: true)
+                    
+                    // 设置 app 信息
+                    it.appName.set(project.name)
+                    
+                    // 设置 APK 文件输出路径（延迟到执行阶段处理）
+                    try {
+                        it.baseApkFile.fileProvider(project.provider {
+                            val apkDir = variant.artifacts.get(com.android.build.api.artifact.SingleArtifact.APK).get()
+                            variant.artifacts.getBuiltArtifactsLoader().load(apkDir)?.let { builtArtifacts ->
+                                project.file(builtArtifacts.elements.first().outputFile)
+                            } ?: project.file("${project.layout.buildDirectory.asFile.get()}/outputs/apk/${variant.name}/${project.name}-${variant.name}.apk")
+                        })
+                    } catch (e: Exception) {
+                        println("Warning: Could not configure APK file path, will resolve at execution time: ${e.message}")
+                    }
+                    
                     it.dependsOn("assemble$variantName")
                 }
             }
         }
 
         //重新生成渠道包
-        project.tasks.register("reBuildChannel", RebuildApkChannelPackageTask::class.java) {
-            it.mergeExtChannelList = !project.hasProperty(PROPERTY_CHANNELS)
-            it.channelList.addAll(channelInfoList)
-            it.rebuildExt = rebuildConfigExt
-        }
+        // project.tasks.register("reBuildChannel", RebuildApkChannelPackageTask::class.java) {
+        //     it.mergeExtChannelList = !project.hasProperty(PROPERTY_CHANNELS)
+        //     it.channelList.addAll(channelInfoList)
+        //     it.rebuildExt = rebuildConfigExt
+        // }
     }
 
     /**

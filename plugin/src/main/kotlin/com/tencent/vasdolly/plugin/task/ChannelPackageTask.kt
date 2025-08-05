@@ -25,9 +25,16 @@ abstract class ChannelPackageTask : DefaultTask() {
      * 合并渠道列表
      */
     fun mergeChannelList() {
+        println("=== DEBUG: mergeChannelList() ===")
         val extensionChannelList = getExtensionChannelList()
+        println("DEBUG: extensionChannelList = $extensionChannelList")
+        println("DEBUG: channelList before merge = $channelList")
+        
         if (extensionChannelList.isNotEmpty()) {
             channelList.addAll(extensionChannelList)
+            println("DEBUG: channelList after merge = $channelList")
+        } else {
+            println("DEBUG: extensionChannelList is empty, no merge performed")
         }
     }
 
@@ -40,7 +47,7 @@ abstract class ChannelPackageTask : DefaultTask() {
         lowMemory: Boolean,
         isFastMode: Boolean
     ) {
-        println("------ $project.name:$name generate v2 channel apk  , begin ------")
+        println("------ $name generate v2 channel apk  , begin ------")
         val apkSectionInfo = IdValueWriter.getApkSectionInfo(baseApk, lowMemory)
         channelList.forEach { channel ->
             val apkChannelName = getChannelApkName(baseApk.name, channel)
@@ -71,7 +78,7 @@ abstract class ChannelPackageTask : DefaultTask() {
                 apkSectionInfo.checkEocdCentralDirOffset()
             }
         }
-        println("------ $project.name:$name generate v2 channel apk , end ------")
+        println("------ $name generate v2 channel apk , end ------")
     }
 
     /**
@@ -79,7 +86,7 @@ abstract class ChannelPackageTask : DefaultTask() {
      */
     fun generateV1ChannelApk(baseApk: File, outputDir: File, isFastMode: Boolean) {
         //check v1 signature , if not have v1 signature , you can't install Apk below 7.0
-        println("------$project.name:$name generate v1 channel apk, begin------")
+        println("------$name generate v1 channel apk, begin------")
 
         if (!ChannelReader.containV1Signature(baseApk)) {
             val msg =
@@ -115,7 +122,7 @@ abstract class ChannelPackageTask : DefaultTask() {
                 }
             }
         }
-        println("------$project.name:$name generate v1 channel apk , end------")
+        println("------$name generate v1 channel apk , end------")
     }
 
     abstract fun getChannelApkName(baseApkName: String, channel: String): String

@@ -39,14 +39,23 @@ open class ConfigExtension(var project: Project) {
      * 从扩展属性中获取channelFile配置的扩展渠道列表
      */
     fun getExtensionChannelList(): List<String> {
+        println("=== DEBUG: getExtensionChannelList() ===")
+        println("DEBUG: channelFile = ${channelFile?.absolutePath}")
+        println("DEBUG: channelFile exists = ${channelFile?.exists()}")
+        println("DEBUG: channelFile isFile = ${channelFile?.isFile}")
+        
         val channelList = mutableListOf<String>()
         if (channelFile != null && channelFile?.isFile!! && channelFile?.exists()!!) {
             channelFile?.forEachLine { channel ->
                 if (channel.isNotEmpty()) {
                     channelList.add(channel)
+                    println("DEBUG: Added channel: '$channel'")
+                } else {
+                    println("DEBUG: Skipped empty line")
                 }
             }
-            println("get channels from `channelFile`,channels:$channelList")
+        } else {
+            println("DEBUG: channelFile is null or not valid")
         }
         return channelList
     }
