@@ -1,7 +1,8 @@
 plugins {
     id 'java-library'
+    id 'maven-publish'
 }
-apply from: rootProject.file("maven.gradle")
+// apply from: rootProject.file("maven.gradle")
 
 dependencies {
     implementation project(':common')
@@ -10,5 +11,16 @@ dependencies {
 java {
     targetCompatibility = JavaVersion.VERSION_1_8
     sourceCompatibility = JavaVersion.VERSION_1_8
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.yibaoshan.vasdolly'
+            artifactId = 'writer'
+            version = rootProject.VERSION
+            from components.java
+        }
+    }
 }
 

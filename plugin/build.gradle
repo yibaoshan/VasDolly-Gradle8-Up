@@ -2,15 +2,22 @@ plugins {
     id 'java'
     id "java-gradle-plugin"
     id 'org.jetbrains.kotlin.jvm' version "1.9.0"
+    id 'maven-publish'
 }
 // apply from: rootProject.file("maven.gradle")
 
+repositories {
+    mavenLocal()
+    google()
+    mavenCentral()
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':writer')
-    implementation project(':reader')
-    implementation project(':verify')
-    implementation project(':common')
+    implementation 'com.yibaoshan.vasdolly:writer:3.0.7-beta'
+    implementation 'com.yibaoshan.vasdolly:reader:3.0.7-beta'
+    implementation 'com.yibaoshan.vasdolly:verify:3.0.7-beta'
+    implementation 'com.yibaoshan.vasdolly:common:3.0.7-beta'
     //implementation gradleApi()
     compileOnly "com.android.tools.build:gradle:8.12.0"
 }
@@ -37,4 +44,15 @@ gradlePlugin {
     }
 }
 
-apply from: rootProject.file("maven.gradle")
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.yibaoshan.vasdolly'
+            artifactId = 'plugin'
+            version = rootProject.VERSION
+            from components.java
+        }
+    }
+}
+
+// apply from: rootProject.file("maven.gradle")

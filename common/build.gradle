@@ -1,10 +1,22 @@
 plugins {
     id 'java-library'
+    id 'maven-publish'
 }
 // apply from: rootProject.file("maven.gradle")
 
 java {
     targetCompatibility = JavaVersion.VERSION_1_8
     sourceCompatibility = JavaVersion.VERSION_1_8
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.yibaoshan.vasdolly'
+            artifactId = 'common'
+            version = rootProject.VERSION
+            from components.java
+        }
+    }
 }
 

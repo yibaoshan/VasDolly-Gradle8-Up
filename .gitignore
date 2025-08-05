@@ -38,3 +38,4 @@ proguard/
 bin/
 gen/
 
+/.vscode/settings.json

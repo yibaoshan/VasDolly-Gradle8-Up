@@ -31,6 +31,6 @@ dependencies {
     implementation project(':reader')
 }
 
-apply from: rootProject.file("maven.gradle")
+// // apply from: rootProject.file("maven.gradle")
 
 
