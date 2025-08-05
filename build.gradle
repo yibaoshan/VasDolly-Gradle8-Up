@@ -32,7 +32,7 @@ ext {
 
     //VasDolly插件版本信息
     GROUP = 'com.yibaoshan.vasdolly'
-    VERSION = 'v3.0.7'
+    VERSION = '3.0.8-beta'
 }
 
 task clean(type: Delete) {
