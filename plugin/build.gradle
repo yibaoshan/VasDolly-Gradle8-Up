@@ -14,10 +14,10 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.yibaoshan.vasdolly:writer:3.0.7-beta'
-    implementation 'com.yibaoshan.vasdolly:reader:3.0.7-beta'
-    implementation 'com.yibaoshan.vasdolly:verify:3.0.7-beta'
-    implementation 'com.yibaoshan.vasdolly:common:3.0.7-beta'
+    implementation project(':writer')
+    implementation project(':reader')
+    implementation project(':verify')
+    implementation project(':common')
     //implementation gradleApi()
     compileOnly "com.android.tools.build:gradle:8.12.0"
 }

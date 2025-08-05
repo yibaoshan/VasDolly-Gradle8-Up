@@ -4,5 +4,5 @@ before_install:
   - sdk install java 17.0.2-open
   - sdk use java 17.0.2-open
 install:
-  - echo "Running a custom install command"
-  - ./gradlew :plugin:publishToMavenLocal :helper:publishToMavenLocal
+  - echo "Running simplified build for Jitpack"
+  - ./gradlew :plugin:build :helper:build
