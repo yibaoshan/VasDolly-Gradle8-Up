@@ -43,6 +43,18 @@ afterEvaluate {
                 
                 artifact bundleReleaseAar
                 artifact androidSourcesJar
+                
+                pom {
+                    withXml {
+                        def dependenciesNode = asNode().appendNode('dependencies')
+                        
+                        def readerDependency = dependenciesNode.appendNode('dependency')
+                        readerDependency.appendNode('groupId', 'com.yibaoshan.vasdolly')
+                        readerDependency.appendNode('artifactId', 'reader')
+                        readerDependency.appendNode('version', rootProject.VERSION)
+                        readerDependency.appendNode('scope', 'runtime')
+                    }
+                }
             }
         }
     }
