@@ -22,7 +22,7 @@ VasDolly是一种快速多渠道打包工具，同时支持基于V1签名和V2,V
 ```
 [versions]
 ...
-vasDolly = "v3.0.9"
+vasDolly = "v3.0.9-beta"
 
 [libraries]
 ...
@@ -50,7 +50,7 @@ buildscript {
         maven { url = uri("https://jitpack.io") }
     }
     dependencies {
-        classpath("com.github.yibaoshan.VasDolly-Gradle8-Up:plugin:v3.0.9") // here
+        classpath("com.github.yibaoshan.VasDolly-Gradle8-Up:plugin:v3.0.9-beta") // here
     }
 }
 plugins {
@@ -72,7 +72,7 @@ pluginManagement {
     resolutionStrategy {
         eachPlugin {
             if (requested.id.id == "com.yibaoshan.vasdolly") {
-                useModule("com.github.yibaoshan.VasDolly-Gradle8-Up:plugin:v3.0.9")
+                useModule("com.github.yibaoshan.VasDolly-Gradle8-Up:plugin:v3.0.9-beta")
             }
         }
     }
